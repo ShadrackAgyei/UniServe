@@ -47,7 +47,7 @@ dependencies:
   qr_flutter: ^4.1.0
   # Timezone support for scheduled notifications
   timezone: ^0.9.4
-  flutter_timezone: ^1.0.4
+  flutter_timezone: ^5.0.2
 
 dev_dependencies:
   flutter_test:

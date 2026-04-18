@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Uniserve</string>
+	<string>UniServe</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>uniserve</string>
+	<string>UniServe</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -45,5 +45,17 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>UniServe needs camera access to take photos of campus issues and lost items</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>UniServe needs photo library access to attach images to reports</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>UniServe needs location access to show your position on the campus map</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>UniServe needs location access to show your position on the campus map</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>UniServe needs microphone access to let you dictate issue and lost item descriptions</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>UniServe uses speech recognition to transcribe your spoken descriptions</string>
 </dict>
 </plist>

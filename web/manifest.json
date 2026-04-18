@@ -1,6 +1,6 @@
 {
-    "name": "uniserve",
-    "short_name": "uniserve",
+    "name": "UniServe",
+    "short_name": "UniServe",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -41,3 +41,13 @@ ios/Flutter/Flutter.podspec
 # Temporary files
 *.tmp
 *.swp
+
+# Local assistant / planning artifacts
+.claude/
+.superpowers/
+docs/system-secrets.txt
+docs/
+tasks/
+AGENTS.md
+CLAUDE.md
+server/config/database.php

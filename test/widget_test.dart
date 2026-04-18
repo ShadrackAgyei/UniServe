@@ -1,30 +1,47 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:uniserve/main.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uniserve/config/supabase_config.dart';
+import 'package:uniserve/providers/auth_provider.dart';
+import 'package:uniserve/screens/splash/splash_screen.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  setUpAll(() async {
+    await Supabase.initialize(
+      url: SupabaseConfig.url,
+      anonKey: SupabaseConfig.anonKey,
+    );
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('Splash screen displays app name', (WidgetTester tester) async {
+    final authProvider = AuthProvider();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    final router = GoRouter(
+      initialLocation: '/splash',
+      routes: [
+        GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
+        GoRoute(path: '/signup', builder: (context, state) => const Scaffold(body: Text('Signup'))),
+        GoRoute(path: '/', builder: (context, state) => const Scaffold(body: Text('Home'))),
+      ],
+    );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.pumpWidget(
+      ChangeNotifierProvider.value(
+        value: authProvider,
+        child: MaterialApp.router(routerConfig: router),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 500));
+
+    expect(find.text('UniServe'), findsOneWidget);
+    expect(find.text('Your Campus, Your Services'), findsOneWidget);
+
+    // Advance past the 1.5-second navigation delay
+    await tester.pumpAndSettle(const Duration(seconds: 2));
+
+    // After navigation, should route to signup (not logged in)
+    expect(find.text('Signup'), findsOneWidget);
   });
 }
