@@ -102,16 +102,7 @@ GoRouter createRouter(AuthProvider authProvider) {
               ),
             ],
           ),
-          // Tab 3: Profile
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/profile',
-                builder: (context, state) => const ProfileScreen(),
-              ),
-            ],
-          ),
-          // Tab 4: Campus
+          // Tab 3: Campus
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -166,6 +157,15 @@ GoRouter createRouter(AuthProvider authProvider) {
                     builder: (context, state) => const QrScannerScreen(),
                   ),
                 ],
+              ),
+            ],
+          ),
+          // Tab 4: Profile
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/profile',
+                builder: (context, state) => const ProfileScreen(),
               ),
             ],
           ),
