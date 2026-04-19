@@ -75,4 +75,12 @@ class StudyRoomsProvider extends ChangeNotifier {
     await SupabaseService.cancelRoomBooking(id);
     await fetchMyBookings();
   }
+
+  String roomNameFor(String roomId) {
+    try {
+      return _rooms.firstWhere((r) => r.id == roomId).name;
+    } catch (_) {
+      return 'Room';
+    }
+  }
 }

@@ -115,7 +115,7 @@ class _CampusHubScreenState extends State<CampusHubScreen> {
             icon: Icons.meeting_room_outlined,
             title: 'Study Rooms',
             subtitle: nextBooking != null
-                ? 'Room · ${DateFormat('MMM d').format(nextBooking.bookingDate)} ${nextBooking.startTime.format(context)}–${nextBooking.endTime.format(context)}'
+                ? '${rooms.roomNameFor(nextBooking.roomId)} · ${DateFormat('MMM d').format(nextBooking.bookingDate)} ${nextBooking.startTime.format(context)}–${nextBooking.endTime.format(context)}'
                 : 'Book a study space',
             bgAlphaDark: 0.04,
             borderAlphaDark: 0.10,
