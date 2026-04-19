@@ -9,18 +9,18 @@ class AppShell extends StatelessWidget {
   const AppShell({super.key, required this.navigationShell});
 
   static const _tabs = [
-    (icon: Icons.home_outlined,      activeIcon: Icons.home,             label: 'HOME'),
-    (icon: Icons.report_problem_outlined, activeIcon: Icons.report_problem, label: 'ISSUES'),
-    (icon: Icons.search_outlined,    activeIcon: Icons.search,           label: 'LOST'),
-    (icon: Icons.person_outline,     activeIcon: Icons.person,           label: 'PROFILE'),
-    (icon: Icons.school_outlined,    activeIcon: Icons.school,           label: 'CAMPUS'),
+    (icon: Icons.home_outlined,           activeIcon: Icons.home,             label: 'Home'),
+    (icon: Icons.report_problem_outlined, activeIcon: Icons.report_problem,   label: 'Issues'),
+    (icon: Icons.search_outlined,         activeIcon: Icons.search,           label: 'Lost'),
+    (icon: Icons.school_outlined,         activeIcon: Icons.school,           label: 'Campus'),
+    (icon: Icons.person_outline,          activeIcon: Icons.person,           label: 'Profile'),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: _FloatingTabBar(
+      bottomNavigationBar: _SimpleTabBar(
         currentIndex: navigationShell.currentIndex,
         onTap: (i) => navigationShell.goBranch(
           i,
@@ -31,100 +31,89 @@ class AppShell extends StatelessWidget {
   }
 }
 
-class _FloatingTabBar extends StatelessWidget {
+class _SimpleTabBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
 
-  const _FloatingTabBar({required this.currentIndex, required this.onTap});
+  const _SimpleTabBar({required this.currentIndex, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final isDark = cs.brightness == Brightness.dark;
-
-    final navBg    = isDark ? const Color(0xFF1A1A1A) : const Color(0xFFF0F0F0);
+    final navBg     = isDark ? const Color(0xFF1A1A1A) : const Color(0xFFF0F0F0);
     final navBorder = isDark ? const Color(0xFF2A2A2A) : const Color(0xFFE0E0E0);
-    final inactiveColor = isDark ? const Color(0xFF666666) : const Color(0xFFAAAAAA);
-    final activeBg = isDark ? Colors.white : Colors.black;
-    final activeContent = isDark ? Colors.black : Colors.white;
+    final activeColor   = isDark ? Colors.white : Colors.black;
+    final inactiveColor = isDark
+        ? Colors.white.withValues(alpha: 0.30)
+        : Colors.black.withValues(alpha: 0.25);
 
     return Container(
-      color: navBg,
+      decoration: BoxDecoration(
+        color: navBg,
+        border: Border(top: BorderSide(color: navBorder, width: 1)),
+      ),
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            decoration: BoxDecoration(
-              color: navBg,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: navBorder),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: List.generate(AppShell._tabs.length, (i) {
-                final tab = AppShell._tabs[i];
-                final isActive = i == currentIndex;
-                return Expanded(
-                  child: Semantics(
-                    button: true,
-                    selected: isActive,
-                    label: '${tab.label} tab',
-                    child: Tooltip(
-                      message: tab.label,
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () async {
-                            if (i == currentIndex) return;
-                            await HapticsService.selection(context);
-                            onTap(i);
-                          },
-                          borderRadius: BorderRadius.circular(20),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            curve: Curves.easeInOut,
-                            padding: isActive
-                                ? const EdgeInsets.symmetric(horizontal: 12, vertical: 8)
-                                : const EdgeInsets.all(10),
-                            decoration: isActive
-                                ? BoxDecoration(
-                                    color: activeBg,
-                                    borderRadius: BorderRadius.circular(20),
-                                  )
-                                : null,
-                            child: isActive
-                                ? FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(tab.activeIcon, size: 18, color: activeContent),
-                                        const SizedBox(width: 6),
-                                        Text(
-                                          tab.label,
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w600,
-                                            letterSpacing: 1.2,
-                                            color: activeContent,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : Icon(tab.icon, size: 22, color: inactiveColor),
-                          ),
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            children: List.generate(AppShell._tabs.length, (i) {
+              final tab = AppShell._tabs[i];
+              final isActive = i == currentIndex;
+
+              return Expanded(
+                child: Semantics(
+                  button: true,
+                  selected: isActive,
+                  label: '${tab.label} tab',
+                  child: Tooltip(
+                    message: tab.label,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () async {
+                          if (i == currentIndex) return;
+                          await HapticsService.selection(context);
+                          onTap(i);
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              isActive ? tab.activeIcon : tab.icon,
+                              size: 22,
+                              color: isActive ? activeColor : inactiveColor,
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              tab.label,
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: isActive ? FontWeight.w700 : FontWeight.w400,
+                                letterSpacing: 0.5,
+                                color: isActive ? activeColor : inactiveColor,
+                              ),
+                            ),
+                            const SizedBox(height: 3),
+                            Container(
+                              width: 4,
+                              height: 4,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: isActive
+                                    ? const Color(0xFFB0311E)
+                                    : Colors.transparent,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                );
-              }),
-            ),
+                ),
+              );
+            }),
           ),
         ),
       ),
