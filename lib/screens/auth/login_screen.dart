@@ -45,7 +45,25 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      body: SafeArea(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        width: double.infinity,
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.sizeOf(context).height,
+        ),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF2A0804),
+              Color(0xFFB0311E),
+              Color(0xFF8B2015),
+            ],
+            stops: [0.0, 0.6, 1.0],
+          ),
+        ),
+        child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Form(
@@ -59,14 +77,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 64,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: theme.colorScheme.primary.withValues(alpha: 0.08),
+                    color: Colors.white.withValues(alpha: 0.15),
                     border: Border.all(
-                      color: theme.colorScheme.outline,
+                      color: Colors.white.withValues(alpha: 0.4),
                       width: 1,
                     ),
                   ),
-                  child: Icon(Icons.school_rounded, size: 32,
-                      color: theme.colorScheme.primary),
+                  child: const Icon(Icons.school_rounded, size: 32,
+                      color: Colors.white),
                 ),
                 const SizedBox(height: 24),
                 Text('Welcome Back',
@@ -74,11 +92,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w300,
                       letterSpacing: 1,
+                      color: Colors.white,
                     )),
                 const SizedBox(height: 8),
                 Text('Log in to your account',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: theme.colorScheme.secondary)),
+                    style: const TextStyle(color: Colors.white70)),
                 const SizedBox(height: 48),
                 TextFormField(
                   controller: _emailController,
@@ -124,6 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () => context.go('/signup'),
+                  style: TextButton.styleFrom(foregroundColor: Colors.white70),
                   child: const Text("Don't have an account? Sign up"),
                 ),
               ],
@@ -131,6 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+        ),
     );
   }
 }

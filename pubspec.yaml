@@ -61,9 +61,9 @@ flutter_launcher_icons:
   remove_alpha_ios: true
   web:
     generate: true
-  image_path: "assets/images/uniserve_logo.png"
-  adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/images/uniserve_logo.png"
+  image_path: "assets/images/app_icon3.png"
+  adaptive_icon_background: "#B0311E"
+  adaptive_icon_foreground: "assets/images/app_icon3.png"
 
 flutter:
   uses-material-design: true
