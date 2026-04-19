@@ -19,6 +19,15 @@ class EventsProvider extends ChangeNotifier {
     return upcoming.first;
   }
 
+  CampusEvent? get nextRsvpdEvent {
+    final now = DateTime.now();
+    final rsvpd = _events
+        .where((e) => _myRsvps.containsKey(e.id) && e.eventDate.isAfter(now))
+        .toList()
+      ..sort((a, b) => a.eventDate.compareTo(b.eventDate));
+    return rsvpd.isEmpty ? null : rsvpd.first;
+  }
+
   Future<void> fetchEvents() async {
     _isLoading = true;
     notifyListeners();

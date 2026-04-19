@@ -12,6 +12,25 @@ class StudyRoomsProvider extends ChangeNotifier {
   List<StudyRoomBooking> get myBookings => _myBookings;
   bool get isLoading => _isLoading;
 
+  StudyRoomBooking? get nextBooking {
+    final now = DateTime.now();
+    final upcoming = _myBookings.where((b) {
+      final end = DateTime(
+        b.bookingDate.year, b.bookingDate.month, b.bookingDate.day,
+        b.endTime.hour, b.endTime.minute,
+      );
+      return end.isAfter(now);
+    }).toList()
+      ..sort((a, b) {
+        final aStart = DateTime(a.bookingDate.year, a.bookingDate.month,
+            a.bookingDate.day, a.startTime.hour, a.startTime.minute);
+        final bStart = DateTime(b.bookingDate.year, b.bookingDate.month,
+            b.bookingDate.day, b.startTime.hour, b.startTime.minute);
+        return aStart.compareTo(bStart);
+      });
+    return upcoming.isEmpty ? null : upcoming.first;
+  }
+
   Future<void> fetchRooms() async {
     _isLoading = true;
     notifyListeners();
