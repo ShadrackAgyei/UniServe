@@ -91,6 +91,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final appDir = await getApplicationDocumentsDirectory();
     final localFile = File('${appDir.path}/profile_photo_$userId.jpg');
     await File(image.path).copy(localFile.path);
+    PaintingBinding.instance.imageCache.clear();
+    PaintingBinding.instance.imageCache.clearLiveImages();
     authProvider.setLocalProfilePhoto(localFile.path);
     if (!mounted) return;
 

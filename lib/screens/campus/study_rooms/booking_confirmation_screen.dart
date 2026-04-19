@@ -42,7 +42,7 @@ class BookingConfirmationScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Scan this QR code at the room entrance',
+                'Show this QR code at the room entrance',
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall

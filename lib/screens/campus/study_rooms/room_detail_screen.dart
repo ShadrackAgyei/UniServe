@@ -5,6 +5,7 @@ import '../../../models/study_room.dart';
 import '../../../models/study_room_booking.dart';
 import '../../../providers/study_rooms_provider.dart';
 import '../../../providers/connectivity_provider.dart';
+import '../../../services/notification_service.dart';
 
 class RoomDetailScreen extends StatefulWidget {
   final StudyRoom room;
@@ -80,6 +81,12 @@ class _RoomDetailScreenState extends State<RoomDetailScreen> {
                 end: TimeOfDay(hour: _selectedSlot!.hour + 1, minute: 0),
               );
       if (mounted) {
+        final slotStr = _selectedSlot!.format(context);
+        NotificationService.showNotification(
+          id: booking.id.hashCode.abs() % 2147483647,
+          title: 'Room Booked!',
+          body: '${widget.room.name} · ${_selectedDate.day}/${_selectedDate.month} at $slotStr',
+        );
         context.push(
           '/campus/study-rooms/${widget.room.id}/confirm',
           extra: booking,

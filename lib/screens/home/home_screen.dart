@@ -80,6 +80,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('UniServe'),
+        centerTitle: false,
+        backgroundColor: const Color(0xFFB0311E),
+        foregroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+      ),
       body: SafeArea(
         child: RefreshIndicator(
           color: theme.colorScheme.primary,
@@ -252,15 +259,27 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               date.month == today.month &&
               date.year == today.year;
 
+          const brand = Color(0xFFB0311E);
+          final isDark = cs.brightness == Brightness.dark;
           return Container(
             width: 50,
             margin: const EdgeInsets.only(right: 8),
             decoration: BoxDecoration(
-              color: isToday ? cs.onSurface : cs.surface,
+              gradient: isToday
+                  ? const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Color(0xFFB0311E), Color(0xFF8B2217)],
+                    )
+                  : null,
+              color: isToday
+                  ? null
+                  : Color.fromRGBO(176, 49, 30, isDark ? 0.08 : 0.05),
               borderRadius: BorderRadius.circular(16),
               border: isToday
                   ? null
-                  : Border.all(color: cs.outline),
+                  : Border.all(
+                      color: Color.fromRGBO(176, 49, 30, isDark ? 0.20 : 0.14)),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -269,7 +288,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   DateFormat('E').format(date).substring(0, 3).toUpperCase(),
                   style: TextStyle(
                     fontSize: 10,
-                    color: isToday ? cs.onPrimary : cs.secondary,
+                    color: isToday
+                        ? Colors.white
+                        : brand.withValues(alpha: isDark ? 0.6 : 0.55),
                     fontWeight: FontWeight.w500,
                     letterSpacing: 0.5,
                   ),
@@ -280,7 +301,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w400,
-                    color: isToday ? cs.onPrimary : cs.onSurface,
+                    color: isToday
+                        ? Colors.white
+                        : (isDark
+                            ? const Color(0xFFF5F5F5)
+                            : const Color(0xFF111111)),
                   ),
                 ),
               ],
@@ -524,11 +549,17 @@ class _QuickAccessCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final isDark = cs.brightness == Brightness.dark;
+    final bg = Color.fromRGBO(176, 49, 30, isDark ? 0.10 : 0.06);
+    final border = Color.fromRGBO(176, 49, 30, isDark ? 0.22 : 0.16);
+    final iconBg = Color.fromRGBO(176, 49, 30, isDark ? 0.45 : 0.55);
+
     return Semantics(
       button: true,
       label: label.replaceAll('\n', ' '),
       child: Material(
-        color: Colors.transparent,
+        color: bg,
+        borderRadius: BorderRadius.circular(16),
         child: InkWell(
           onTap: () async {
             await HapticsService.tap(context);
@@ -538,22 +569,31 @@ class _QuickAccessCard extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: cs.surface,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: cs.outline),
+              border: Border.all(color: border, width: 1.5),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ExcludeSemantics(
-                  child: Icon(icon, size: 28, color: cs.onSurface),
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: iconBg,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(icon, size: 22, color: Colors.white),
+                  ),
                 ),
                 const SizedBox(height: 12),
                 Text(
                   label,
                   style: TextStyle(
-                    color: cs.onSurface,
-                    fontWeight: FontWeight.w400,
+                    color: isDark
+                        ? const Color(0xFFF5F5F5)
+                        : const Color(0xFF111111),
+                    fontWeight: FontWeight.w500,
                     fontSize: 13,
                     height: 1.3,
                   ),

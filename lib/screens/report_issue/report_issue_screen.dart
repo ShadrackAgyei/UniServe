@@ -357,7 +357,7 @@ class _SegmentedControl extends StatelessWidget {
       decoration: BoxDecoration(
         color: cs.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: cs.outline),
+        border: Border.all(color: const Color(0xFFB0311E).withValues(alpha: 0.35)),
       ),
       child: Row(
         children: List.generate(options.length, (i) {
@@ -376,7 +376,12 @@ class _SegmentedControl extends StatelessWidget {
                     duration: const Duration(milliseconds: 150),
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     decoration: BoxDecoration(
-                      color: isSelected ? cs.onSurface : Colors.transparent,
+                      gradient: isSelected
+                          ? const LinearGradient(
+                              colors: [Color(0xFFB0311E), Color(0xFF8B2217)],
+                            )
+                          : null,
+                      color: isSelected ? null : Colors.transparent,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -385,7 +390,7 @@ class _SegmentedControl extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                        color: isSelected ? cs.onPrimary : cs.secondary,
+                        color: isSelected ? Colors.white : cs.secondary,
                       ),
                     ),
                   ),

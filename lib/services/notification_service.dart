@@ -16,24 +16,18 @@ class NotificationService {
 
     const androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
-    const settings =
-        InitializationSettings(android: androidSettings, iOS: iosSettings);
+    const settings = InitializationSettings(android: androidSettings);
     await _plugin.initialize(settings);
+
+    // Clear stale notifications that may have incompatible serialized data
+    try {
+      await _plugin.cancelAll();
+    } catch (_) {}
 
     await _plugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.requestNotificationsPermission();
-
-    await _plugin
-        .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(alert: true, badge: true, sound: true);
   }
 
   static Future<void> showNotification({
@@ -41,29 +35,28 @@ class NotificationService {
     required String title,
     required String body,
   }) async {
-    const androidDetails = AndroidNotificationDetails(
-      'uniserve_channel',
-      'UniServe Notifications',
-      channelDescription: 'Campus notifications and alerts',
-      importance: Importance.high,
-      priority: Priority.high,
+    const details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'uniserve_channel',
+        'UniServe Notifications',
+        channelDescription: 'Campus notifications and alerts',
+        importance: Importance.high,
+        priority: Priority.high,
+      ),
     );
-    const iosDetails = DarwinNotificationDetails();
-    const details =
-        NotificationDetails(android: androidDetails, iOS: iosDetails);
     await _plugin.show(id, title, body, details);
   }
 
   static Future<void> scheduleClassReminder(ClassEntry entry) async {
-    const androidDetails = AndroidNotificationDetails(
-      'class_reminders',
-      'Class Reminders',
-      channelDescription: 'Reminders 10 minutes before your class starts',
-      importance: Importance.high,
-      priority: Priority.high,
-    );
     const details = NotificationDetails(
-        android: androidDetails, iOS: DarwinNotificationDetails());
+      android: AndroidNotificationDetails(
+        'class_reminders',
+        'Class Reminders',
+        channelDescription: 'Reminders 10 minutes before your class starts',
+        importance: Importance.high,
+        priority: Priority.high,
+      ),
+    );
 
     final scheduledTime = _nextOccurrence(entry.dayOfWeek, entry.startTime)
         .subtract(const Duration(minutes: 10));
@@ -76,6 +69,7 @@ class NotificationService {
       details,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+      // ignore: deprecated_member_use
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );
@@ -86,8 +80,7 @@ class NotificationService {
   }
 
   static tz.TZDateTime _nextOccurrence(int dayOfWeek, TimeOfDay time) {
-    // dayOfWeek: 0=Mon; DateTime.weekday: 1=Mon
-    final targetWeekday = dayOfWeek + 1;
+    final targetWeekday = dayOfWeek + 1; // dayOfWeek: 0=Mon; DateTime.weekday: 1=Mon
     final now = tz.TZDateTime.now(tz.local);
     var candidate = tz.TZDateTime(
       tz.local,
@@ -97,8 +90,6 @@ class NotificationService {
       time.hour,
       time.minute,
     );
-    // Advance until we hit the right weekday AND the reminder (10 min before)
-    // would still be in the future.
     while (candidate.weekday != targetWeekday ||
         candidate.subtract(const Duration(minutes: 10)).isBefore(now)) {
       candidate = candidate.add(const Duration(days: 1));

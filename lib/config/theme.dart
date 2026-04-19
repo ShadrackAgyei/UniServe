@@ -41,8 +41,8 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: _dark,
-        foregroundColor: _textPrimary,
+        backgroundColor: Color(0xFFB0311E),
+        foregroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
       ),
       cardTheme: CardThemeData(
@@ -164,8 +164,8 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: _lightBg,
-        foregroundColor: _lightText,
+        backgroundColor: Color(0xFFB0311E),
+        foregroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
       ),
       cardTheme: CardThemeData(

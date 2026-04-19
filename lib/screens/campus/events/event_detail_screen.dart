@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../models/campus_event.dart';
 import '../../../providers/events_provider.dart';
 import '../../../providers/connectivity_provider.dart';
+import '../../../services/notification_service.dart';
 
 class EventDetailScreen extends StatefulWidget {
   final CampusEvent event;
@@ -58,6 +59,11 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     setState(() => _actionInProgress = true);
     try {
       await context.read<EventsProvider>().rsvpToEvent(widget.event.id);
+      NotificationService.showNotification(
+        id: widget.event.id.hashCode.abs() % 2147483647,
+        title: 'RSVP Confirmed!',
+        body: '${widget.event.title} · ${DateFormat('MMM d').format(widget.event.eventDate)}',
+      );
       _loadRsvpCount();
     } catch (e) {
       if (mounted) {

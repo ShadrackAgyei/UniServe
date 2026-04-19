@@ -44,13 +44,17 @@ class ScheduleProvider extends ChangeNotifier {
 
   Future<void> addEntry(ClassEntry entry) async {
     final created = await SupabaseService.insertClassEntry(entry);
-    await NotificationService.scheduleClassReminder(created);
+    try {
+      await NotificationService.scheduleClassReminder(created);
+    } catch (_) {}
     await fetchEntries();
   }
 
   Future<void> deleteEntry(String id) async {
     await SupabaseService.deleteClassEntry(id);
-    await NotificationService.cancelClassReminder(id);
+    try {
+      await NotificationService.cancelClassReminder(id);
+    } catch (_) {}
     await fetchEntries();
   }
 }

@@ -22,6 +22,7 @@ import '../screens/campus/study_rooms/booking_confirmation_screen.dart';
 import '../screens/campus/events/events_screen.dart';
 import '../screens/campus/events/event_detail_screen.dart';
 import '../screens/campus/qr_scanner/qr_scanner_screen.dart';
+import '../screens/campus/study_rooms/my_bookings_screen.dart';
 import '../models/study_room.dart';
 import '../models/study_room_booking.dart';
 import '../models/campus_event.dart';
@@ -151,6 +152,10 @@ GoRouter createRouter(AuthProvider authProvider) {
                         ),
                       ),
                     ],
+                  ),
+                  GoRoute(
+                    path: 'my-bookings',
+                    builder: (context, state) => const MyBookingsScreen(),
                   ),
                   GoRoute(
                     path: 'qr-scanner',

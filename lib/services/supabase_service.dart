@@ -384,7 +384,8 @@ class SupabaseService {
         .from('class_schedule')
         .select('user_id')
         .eq('id', id)
-        .single();
+        .maybeSingle();
+    if (record == null) return; // already deleted
     if (record['user_id'] != userId) {
       throw Exception('Only the person who created this can delete it.');
     }
