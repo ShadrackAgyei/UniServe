@@ -2,6 +2,14 @@
 
 A smart student service app that centralizes campus services for university students. Built with Flutter, targeting iOS and Android.
 
+## Demo
+
+<p align="center">
+  <img src="media/uniserve-demo.gif" alt="UniServe demo" width="300">
+</p>
+
+▶️ **[Watch the full demo video (14 min)](https://github.com/ShadrackAgyei/UniServe/releases/download/demo-video/uniserve-demo.mp4)**
+
 ## Features
 
 | Feature | Description |
